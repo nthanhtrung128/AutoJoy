@@ -1,0 +1,65 @@
+name: Publish AutoJoy P0.1
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/release-p01.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: publish-autojoy-p01
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'nthanhtrung128/AutoJoy'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Download verified P0.1 build
+        run: |
+          gh run download 37753589404 --name AutoJoy-P0.1-apk --dir release-assets
+          mv release-assets/app-debug.apk release-assets/AutoJoy_P0.1.apk
+          echo '37c1e7533d3efb52964486c98fd3154ea6ce7c4a0dd30c107fcecb92348118df  release-assets/AutoJoy_P0.1.apk' | sha256sum --check
+      - name: Publish release
+        run: |
+          cat > notes.md <<'NOTES'
+          ## AutoJoy P0.1 — Bản kiểm tra thao tác Android
+          
+          ### Thay đổi
+          - DỪNG hủy các lần bấm còn chờ và yêu cầu nhả joystick.
+          - Chặn chạy nhiều bài cùng lúc; callback cũ không thể chạy lại tác vụ.
+          - Giới hạn mỗi bài 5–60 giây, mặc định 30 giây.
+          - Màn mô phỏng joystick nhận thao tác thật từ Trợ năng, không cần mở game.
+          - Lưu và chia sẻ 40 kết quả gần nhất.
+          
+          ### Tải và cài
+          1. Tải **AutoJoy_P0.1.apk** trong Assets bên dưới bằng Chrome hoặc Samsung Internet.
+          2. Mở **My Files / File của bạn → Downloads / Tải về → AutoJoy_P0.1.apk**. Không cần giải nén APK.
+          3. Cho phép cài từ ứng dụng đang mở file nếu Android hỏi. Nếu Samsung Auto Blocker chặn, tạm tắt để cài rồi bật lại.
+          4. Nếu báo xung đột chữ ký với P0, gỡ P0 rồi cài P0.1; việc gỡ xóa cấu hình cũ.
+          5. Mở AutoJoy P0.1, bật Trợ năng, cấp quyền chụp khi cần và đặt pin Không hạn chế.
+          6. Thử màn **Mô phỏng joystick** với T1–T5 trước. Khi thử trong game, đặt joystick cố định và hiệu chỉnh lại.
+          
+          [Hướng dẫn đầy đủ](https://github.com/nthanhtrung128/AutoJoy#readme)
+          
+          ### Phạm vi kiểm chứng
+          - Kiểm thử đơn vị cơ chế quản lý phiên và build APK đã thành công trên GitHub.
+          - Chưa kiểm thử P0.1 trên điện thoại thật; mức P0 khoảng 60% là ước lượng của người dùng.
+          - Chưa có tự vào ải, nhận diện boss, né sương hoặc lặp lượt Pandora.
+          - Bản này không bảo đảm tránh khóa tài khoản game.
+          
+          SHA-256: `37c1e7533d3efb52964486c98fd3154ea6ce7c4a0dd30c107fcecb92348118df`
+          NOTES
+          if gh release view v0.1.1-P0.1 >/dev/null 2>&1; then
+            echo 'Release already exists; leaving it unchanged.'
+          else
+            gh release create v0.1.1-P0.1 release-assets/AutoJoy_P0.1.apk --target efc0f3dcc029f583fe93039c56f6f957f512f222 --title 'AutoJoy P0.1' --notes-file notes.md --latest
+          fi

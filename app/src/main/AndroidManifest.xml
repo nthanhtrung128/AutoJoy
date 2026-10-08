@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SimulatorActivity" android:exported="false" android:screenOrientation="landscape" />
+
         <service
             android:name=".BotAccessibilityService"
             android:exported="true"

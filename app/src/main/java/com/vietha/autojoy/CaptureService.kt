@@ -130,6 +130,8 @@ class CaptureService : Service() {
     }
 
     /** Lấy khung hình kế tiếp, phân tích và lưu ảnh. cb chạy trên luồng giao diện. */
+    fun cancelGrab() { bg.post { pending = null } }
+
     fun grab(cb: (String) -> Unit) {
         bg.post {
             val (w, h) = ScreenUtil.realSize(this)
@@ -137,7 +139,7 @@ class CaptureService : Service() {
             pending = cb
             bg.postDelayed({
                 val c = pending
-                if (c != null) {
+                if (c === cb) {
                     pending = null
                     main.post { c("không có khung hình mới trong 2 giây — thử lại khi game đang chạy") }
                 }
@@ -189,7 +191,7 @@ class CaptureService : Service() {
         val avg = if (n > 0) sum / n else 0
         val pct = if (n > 0) lit * 100 / n else 0
         val saved = save(bmp)
-        val verdict = if (pct < 5) "ẢNH ĐEN → game chặn chụp màn hình" else "OK, thấy được game"
+        val verdict = if (pct < 5) "ẢNH TỐI → thử lại ở cảnh sáng; có thể bị chặn chụp" else "ẢNH CÓ NỘI DUNG → mở ảnh để xác nhận đúng game"
         return "${bmp.width}x${bmp.height}, độ sáng TB $avg, $pct% điểm có hình → $verdict. Lưu: $saved"
     }
 

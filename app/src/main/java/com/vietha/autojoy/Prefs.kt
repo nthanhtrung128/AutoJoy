@@ -18,6 +18,15 @@ object Prefs {
     fun atk(ctx: Context): Pair<Float, Float> =
         sp(ctx).getFloat("atkX", 0.87f) to sp(ctx).getFloat("atkY", 0.84f)
 
+    fun sessionSeconds(ctx: Context): Int = sp(ctx).getInt("sessionSeconds", 30).coerceIn(5, 60)
+    fun setSessionSeconds(ctx: Context, value: Int) { sp(ctx).edit().putInt("sessionSeconds", value.coerceIn(5, 60)).apply() }
+    fun history(ctx: Context): String = sp(ctx).getString("history", "") ?: ""
+    fun record(ctx: Context, message: String) {
+        val time = java.text.SimpleDateFormat("dd/MM HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())
+        val lines = (history(ctx).lines().filter { it.isNotBlank() } + "$time — $message").takeLast(40)
+        sp(ctx).edit().putString("history", lines.joinToString("\n")).apply()
+    }
+
     fun radiusDp(ctx: Context): Float = sp(ctx).getFloat("radiusDp", 60f)
 
     fun setJoy(ctx: Context, x: Float, y: Float) =

@@ -1,8 +1,19 @@
-# AutoJoy P0 — Tải, cài đặt và sử dụng
+# AutoJoy P0.1 — Tải, cài đặt và sử dụng
 
 AutoJoy P0 là ứng dụng Android kiểm tra khả năng điều khiển joystick và chụp màn hình trong **Soul Knight Prequel / Hiệp Sĩ Khí Nguyên Tiền Truyện**, hướng tới chế độ **Mê Thành Pandora**.
 
 **Bản P0 chưa tự vào ải, nhận diện boss, né sương hoặc lặp lượt tự động.** APK đã build thành công trên GitHub; khả năng điều khiển game cần kiểm tra trên điện thoại thật qua T1–T6.
+
+## Điểm mới của P0.1
+
+- DỪNG hủy các lần bấm đang chờ, ngăn callback cũ chạy lại; joystick nhả ở đoạn kế tiếp.
+- Chỉ chạy một bài mỗi lần; muốn đổi bài, bấm DỪNG và chờ nhả joystick.
+- Chọn giới hạn mỗi bài 5–60 giây trong app, mặc định 30 giây. T2–T5 bị rút ngắn nếu giới hạn thấp hơn thời lượng bài.
+- Màn mô phỏng ngang nhận thao tác thật từ Trợ năng, hiển thị số lần đánh, thời gian giữ và số lần nhả. Mô phỏng không xác nhận game tương thích.
+- Lưu 40 kết quả gần nhất và chia sẻ log bằng lựa chọn của người dùng.
+- Mức thành công P0 khoảng 60% do người dùng ước lượng, chưa có kết quả chi tiết theo bài.
+
+Bản mới tải tại **Actions → lần chạy Build APK mới nhất thành công → Artifacts → AutoJoy-P0.1-apk**, giải nén ZIP để lấy `app-debug.apk`. Link Release P0 bên dưới vẫn là bản cũ cho tới khi chủ repo cập nhật APK. Nếu Android báo xung đột chữ ký khi cài bản debug mới, gỡ P0 rồi cài P0.1; thao tác này xóa cấu hình cũ nên cần hiệu chỉnh lại.
 
 ## 1. Tải APK trên điện thoại
 
@@ -80,7 +91,7 @@ Hiệu chỉnh lại khi đổi bố cục nút trong game hoặc vị trí joys
 | **T5 Zigzag** | Đi chéo xuống trái/phải trong khoảng 20 giây, bấm đánh mỗi 3 giây | Nhân vật có đảo trái/phải và đi dần xuống không? |
 | **T6 Chụp** | Lấy và lưu ảnh màn hình | Ảnh có hiển thị game rõ ràng không? |
 
-- **DỪNG** yêu cầu bài joystick đang chạy nhả joystick; bài này có thể cần hoàn tất đoạn thao tác ngắn hiện tại. Trong P0, nút này không huỷ các lần bấm T1 đã hẹn hoặc dừng dịch vụ chụp màn hình.
+- **DỪNG** yêu cầu bài joystick đang chạy nhả joystick; bài này có thể cần hoàn tất đoạn thao tác ngắn hiện tại. Trong P0.1, nút này hủy các lần bấm T1 còn chờ và yêu cầu chụp T6 còn chờ; dịch vụ chụp màn hình vẫn cần tắt riêng trong app.
 - Dòng log xanh **gửi thành công** chỉ xác nhận Android nhận thao tác; bạn vẫn cần nhìn trong game để xác nhận nhân vật phản ứng.
 - T6 lưu ảnh vào **Thư viện / Gallery → album AutoJoy**, hoặc **Pictures/AutoJoy** trên Android 10 trở lên. Trên Android 8–9, xem đường dẫn ghi trong log vì ảnh lưu ở thư mục riêng của app.
 - Nhận xét độ sáng ở T6 chỉ là kiểm tra sơ bộ. Ảnh tối không đủ để khẳng định game chặn chụp; hãy thử lại khi game hiển thị cảnh sáng và mở ảnh để kiểm tra.
@@ -102,7 +113,7 @@ Hiệu chỉnh lại khi đổi bố cục nút trong game hoặc vị trí joys
 
 ## 8. Kết thúc sử dụng và gửi kết quả
 
-1. Bấm **DỪNG**, chờ thao tác joystick kết thúc; nếu T1 đang chạy, chờ đủ 3 lần bấm.
+1. Bấm **DỪNG**, chờ thao tác joystick kết thúc; các lần bấm T1 còn chờ được hủy.
 2. Về AutoJoy và bấm **Tắt chụp màn hình**.
 3. Nếu muốn tắt bảng nổi, vào **Cài đặt → Trợ năng → AutoJoy – điều khiển game → Tắt**.
 4. Gửi kết quả từng bài T1–T6: **Đúng / Sai / Không phản ứng**, kèm ảnh dòng log và ảnh do T6 tạo. Nêu model điện thoại, Android/One UI và vị trí đã hiệu chỉnh.
@@ -113,7 +124,7 @@ Kết quả T2–T4 giúp xác định cách điều khiển cho giai đoạn bo
 
 - Tên hiển thị trong điện thoại: **AutoJoy P0**.
 - Package: `com.vietha.autojoy`.
-- Phiên bản: `0.1-P0` — bản debug để kiểm tra khả thi.
-- SHA-256 của APK đã build: `ecc3eafd48ab1988cabc78ff74c9cc31a23566720610db733242bb54a11c8915`.
+- Phiên bản mới: `0.1.1-P0.1` — bản debug để kiểm tra khả thi.
+- SHA-256 của APK P0 cũ: `ecc3eafd48ab1988cabc78ff74c9cc31a23566720610db733242bb54a11c8915`.
 - [Hướng dẫn build dành cho người phát triển](HUONG_DAN.md).
 - Hướng dẫn hệ thống: [Android — Cài đặt bị hạn chế](https://support.google.com/android/answer/12623953?hl=vi), [Samsung — Auto Blocker](https://www.samsung.com/uk/support/mobile-devices/protect-your-galaxy-device-with-the-new-auto-blocker-feature/).

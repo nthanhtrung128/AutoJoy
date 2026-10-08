@@ -11,8 +11,8 @@ android {
         applicationId = "com.vietha.autojoy"
         minSdk = 26          // cần Android 8.0+ để giữ joystick (continueStroke)
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1-P0"
+        versionCode = 2
+        versionName = "0.1.1-P0.1"
     }
 
     buildTypes {
@@ -31,3 +31,6 @@ android {
 }
 
 // Không dùng thư viện ngoài: chỉ API Android gốc, để APK nhỏ và dễ build.
+
+// Unit tests only; no extra runtime dependency.
+dependencies { testImplementation("junit:junit:4.13.2") }

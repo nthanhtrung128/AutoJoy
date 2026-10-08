@@ -43,6 +43,10 @@ class BotAccessibilityService : AccessibilityService() {
     private var logView: TextView? = null
     private var calibView: View? = null
     private var driver: JoystickDriver? = null
+    private val gate = SessionGate()
+    private val tasks = Handler(Looper.getMainLooper())
+    private var activeName: String? = null
+    private var destroyed = false
     private val logLines = ArrayDeque<String>()
 
     override fun onServiceConnected() {
@@ -58,7 +62,7 @@ class BotAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
 
     override fun onInterrupt() {
-        driver?.stop()
+        stopAll()
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -72,7 +76,8 @@ class BotAccessibilityService : AccessibilityService() {
     }
 
     private fun cleanup() {
-        driver?.stop()
+        destroyed = true
+        stopAll()
         if (::wm.isInitialized) {
             removeView(calibView)
             removeView(panel)
@@ -139,7 +144,7 @@ class BotAccessibilityService : AccessibilityService() {
             setPadding(dpi(6), dpi(2), dpi(6), dpi(6))
         }
         val title = TextView(this).apply {
-            text = "✥ AutoJoy P0"
+            text = "✥ AutoJoy P0.1"
             setTextColor(Color.WHITE)
             textSize = 13f
             setPadding(dpi(4), dpi(8), dpi(14), dpi(8))
@@ -219,20 +224,43 @@ class BotAccessibilityService : AccessibilityService() {
 
     // ---------------------------------------------------------------- helpers
 
-    /** Chờ joystick đang chạy nhả ra hẳn rồi mới làm việc tiếp theo, tránh 2 thao tác đè nhau. */
-    private fun afterStop(action: () -> Unit) {
-        val d = driver
-        if (d != null && d.isRunning) {
-            d.stop()
-            ui.postDelayed({ action() }, 350)
-        } else {
-            action()
+    private fun available(): Boolean {
+        if (destroyed) return false
+        if (gate.isBusy || driver?.isRunning == true || calibView != null) {
+            log("Đang có tác vụ. Bấm DỪNG và chờ nhả joystick trước khi chạy bài khác.")
+            return false
         }
+        return true
     }
 
-    private fun stopAll() {
+    private fun begin(name: String, durationMs: Long): Long? {
+        if (!available()) return null
+        val token = gate.begin() ?: return null
+        activeName = name
+        tasks.postDelayed({ if (gate.owns(token)) stopAll("hết giới hạn phiên") }, durationMs + 1_000)
+        return token
+    }
+
+    private fun complete(token: Long, message: String) {
+        if (!gate.finish(token)) return
+        tasks.removeCallbacksAndMessages(null)
+        activeName = null
+        Prefs.record(this, message)
+        log(message)
+    }
+
+    fun stopAll(reason: String = "người dùng dừng") {
+        val name = activeName
+        gate.cancel()
+        tasks.removeCallbacksAndMessages(null)
+        activeName = null
         driver?.stop()
-        log("Đã dừng")
+        CaptureService.instance?.cancelGrab()
+        removeView(calibView)
+        calibView = null
+        val message = if (name != null) "$name: đã dừng ($reason)" else "Đã hủy tác vụ chờ; đang nhả joystick nếu có."
+        if (name != null) Prefs.record(this, message)
+        log(message)
     }
 
     private fun fmt(p: PointF) = "(${p.x.toInt()}, ${p.y.toInt()})"
@@ -253,7 +281,8 @@ class BotAccessibilityService : AccessibilityService() {
 
     // ---------------------------------------------------------------- hiệu chỉnh
 
-    private fun calibrate() = afterStop {
+    private fun calibrate() {
+        if (!available()) return
         removeView(calibView)
         val (w, h) = ScreenUtil.realSize(this)
         var step = 0
@@ -300,33 +329,34 @@ class BotAccessibilityService : AccessibilityService() {
 
     // ---------------------------------------------------------------- các bài test
 
-    private fun testTap() = afterStop {
+    private fun testTap() {
+        val token = begin("T1 Bấm", 3_000) ?: return
         val atk = points().second
-        log("T1: bấm nút tấn công 3 lần tại ${fmt(atk)}…")
+        log("T1: bấm 3 lần tại ${fmt(atk)}…")
         var n = 0
         var ok = 0
         fun one() {
+            if (!gate.owns(token)) return
             engine.tap(atk) { success ->
+                if (!gate.owns(token)) return@tap
                 n++
                 if (success) ok++
-                if (n < 3) ui.postDelayed({ one() }, 500)
-                else log("T1 xong: $ok/3 lần gửi thành công. Nhân vật có chém không?")
+                if (n < 3) tasks.postDelayed({ one() }, 500)
+                else complete(token, "T1 xong: $ok/3 lần gửi thành công; cần xác nhận phản ứng trên màn hình.")
             }
         }
         one()
     }
 
-    private fun runJoy(name: String, totalMs: Long, tapEveryMs: Long, angleAt: (Long) -> Float?) =
-        afterStop {
-            val (joy, atk, r) = points()
-            log("$name: chạy ${totalMs / 1000}s (joystick ${fmt(joy)}, kéo ${r.toInt()}px)…")
-            val d = JoystickDriver(
-                engine, joy, r, totalMs, angleAt, tapEveryMs,
-                if (tapEveryMs > 0) atk else null
-            ) { msg -> log("$name $msg") }
-            driver = d
-            d.start()
-        }
+    private fun runJoy(name: String, totalMs: Long, tapEveryMs: Long, angleAt: (Long) -> Float?) {
+        val limit = minOf(totalMs, Prefs.sessionSeconds(this) * 1_000L)
+        val token = begin(name, limit) ?: return
+        val (joy, atk, r) = points()
+        log("$name: chạy tối đa ${limit / 1000}s; kéo ${r.toInt()}px…")
+        driver = JoystickDriver(engine, joy, r, limit, angleAt, tapEveryMs,
+            if (tapEveryMs > 0) atk else null) { msg -> complete(token, "$name $msg") }
+        driver?.start()
+    }
 
     // giữ sang phải 3 giây
     private fun testHold() = runJoy("T2 Giữ", 3_000, 0) { 0f }
@@ -346,11 +376,9 @@ class BotAccessibilityService : AccessibilityService() {
 
     private fun testCapture() {
         val cap = CaptureService.instance
-        if (cap == null) {
-            log("T6: chưa cấp quyền chụp. Mở app AutoJoy → bước 2.")
-            return
-        }
+        if (cap == null) { log("T6: mở AutoJoy và cấp quyền chụp ở bước 2."); return }
+        val token = begin("T6 Chụp", 3_000) ?: return
         log("T6: đang chụp…")
-        cap.grab { msg -> log("T6 $msg") }
+        cap.grab { msg -> complete(token, "T6 $msg") }
     }
 }

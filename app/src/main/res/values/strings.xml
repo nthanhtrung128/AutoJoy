@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AutoJoy P0</string>
+    <string name="acc_label">AutoJoy – điều khiển game</string>
+    <string name="acc_desc">Cho phép AutoJoy gửi thao tác chạm và kéo (joystick, nút tấn công) để chạy thử tự động trong game. AutoJoy không đọc nội dung các ứng dụng khác qua Trợ năng.</string>
+</resources>

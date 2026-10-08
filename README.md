@@ -1,6 +1,6 @@
 # AutoJoy P0.1 — Tải, cài đặt và sử dụng
 
-AutoJoy P0 là ứng dụng Android kiểm tra khả năng điều khiển joystick và chụp màn hình trong **Soul Knight Prequel / Hiệp Sĩ Khí Nguyên Tiền Truyện**, hướng tới chế độ **Mê Thành Pandora**.
+AutoJoy P0.1 là ứng dụng Android kiểm tra khả năng điều khiển joystick và chụp màn hình trong **Soul Knight Prequel / Hiệp Sĩ Khí Nguyên Tiền Truyện**, hướng tới chế độ **Mê Thành Pandora**.
 
 **Bản P0 chưa tự vào ải, nhận diện boss, né sương hoặc lặp lượt tự động.** APK đã build thành công trên GitHub; khả năng điều khiển game cần kiểm tra trên điện thoại thật qua T1–T6.
 
@@ -13,27 +13,27 @@ AutoJoy P0 là ứng dụng Android kiểm tra khả năng điều khiển joyst
 - Lưu 40 kết quả gần nhất và chia sẻ log bằng lựa chọn của người dùng.
 - Mức thành công P0 khoảng 60% do người dùng ước lượng, chưa có kết quả chi tiết theo bài.
 
-Bản mới tải tại **Actions → lần chạy Build APK mới nhất thành công → Artifacts → AutoJoy-P0.1-apk**, giải nén ZIP để lấy `app-debug.apk`. Link Release P0 bên dưới vẫn là bản cũ cho tới khi chủ repo cập nhật APK. Nếu Android báo xung đột chữ ký khi cài bản debug mới, gỡ P0 rồi cài P0.1; thao tác này xóa cấu hình cũ nên cần hiệu chỉnh lại.
+Bản mới đã xuất bản trên Release; dùng nút tải APK bên dưới. Có thể tải thêm qua **Actions → lần chạy Build APK mới nhất thành công → Artifacts → AutoJoy-P0.1-apk**, giải nén ZIP để lấy `app-debug.apk`. Nếu Android báo xung đột chữ ký khi cài bản debug mới, gỡ P0 rồi cài P0.1; thao tác này xóa cấu hình cũ nên cần hiệu chỉnh lại.
 
 ## 1. Tải APK trên điện thoại
 
-### [⬇ TẢI AUTOJOY_P0.APK](https://github.com/nthanhtrung128/AutoJoy/releases/download/v0.1-P0/AutoJoy_P0.apk)
+### [⬇ TẢI AUTOJOY_P0.APK](https://github.com/nthanhtrung128/AutoJoy/releases/download/v0.1.1-P0.1/AutoJoy_P0.1.apk)
 
 - Mở link bằng **Chrome hoặc Samsung Internet** trên điện thoại Android. Không cần cài ứng dụng GitHub. Để người tải không phải đăng nhập, chủ repo cần đặt AutoJoy thành **Public**.
 - Nếu mở từ Zalo/Messenger và không tải được, chọn **Mở bằng trình duyệt** hoặc sao chép link sang Chrome.
-- File tải về tên **AutoJoy_P0.apk**, dung lượng khoảng **0,85 MB**.
+- File tải về tên **AutoJoy_P0.1.apk**, dung lượng khoảng **0,86 MB**.
 - Nếu trình duyệt hỏi xác nhận tải APK, kiểm tra đúng tên file và nguồn `github.com/nthanhtrung128/AutoJoy`, rồi xác nhận tải nếu bạn tin cậy bản này.
 - APK dành cho **Android 8 trở lên**, không cài trên iPhone. Thiết bị mục tiêu là Galaxy S25 Ultra; chưa kiểm thử trên máy thật.
 
-[Trang bản phát hành](https://github.com/nthanhtrung128/AutoJoy/releases/tag/v0.1-P0) · [Lần build thành công](https://github.com/nthanhtrung128/AutoJoy/actions/runs/37750189489)
+[Trang bản phát hành](https://github.com/nthanhtrung128/AutoJoy/releases/tag/v0.1.1-P0.1) · [Lần build thành công](https://github.com/nthanhtrung128/AutoJoy/actions/runs/37753589404)
 
 ## 2. Mở file và cài đặt
 
 1. Khi tải xong, bấm thông báo tải xuống hoặc mở **File của bạn / My Files → Tải về / Downloads**.
-2. Chạm **AutoJoy_P0.apk**. Đây là file cài đặt: không cần giải nén.
+2. Chạm **AutoJoy_P0.1.apk**. Đây là file cài đặt: không cần giải nén.
 3. Nếu hiện **Không được phép cài ứng dụng từ nguồn này**, chọn **Cài đặt → Cho phép từ nguồn này** cho đúng ứng dụng đang mở APK, ví dụ Chrome hoặc My Files. Quay lại và bấm **Cài đặt**.
 4. Nếu Samsung báo **Auto Blocker / Trình chặn tự động** đang chặn cài đặt, vào **Cài đặt → Bảo mật và quyền riêng tư → Trình chặn tự động**, tạm tắt rồi mở APK lại. Tên menu có thể khác theo phiên bản One UI. Sau khi cài xong, bật lại nếu đã tắt.
-5. Cài xong, bấm **Mở** hoặc tìm biểu tượng **AutoJoy P0** trong danh sách ứng dụng. Có thể thu hồi quyền “Cho phép từ nguồn này” sau khi cài.
+5. Cài xong, bấm **Mở** hoặc tìm biểu tượng **AutoJoy P0.1** trong danh sách ứng dụng. Có thể thu hồi quyền “Cho phép từ nguồn này” sau khi cài.
 
 Nếu đây là máy do công ty/trường học quản lý và bị chặn bởi chính sách, liên hệ quản trị viên thiết bị.
 
@@ -66,7 +66,7 @@ Bấm **3. Cài đặt app (Pin → Không hạn chế)** → tìm **Pin → Kh�
 1. Mở **Soul Knight Prequel** và chỉnh joystick thành **CỐ ĐỊNH** trong cài đặt game.
 2. Vào **Mê Thành Pandora**, đứng trong map với joystick và nút tấn công đang hiển thị. P0 chưa tự bấm Khiêu Chiến.
 3. Giữ điện thoại **màn hình ngang** trong khi hiệu chỉnh và chạy thử.
-4. Bảng **AutoJoy P0** sẽ nổi trên màn hình khi dịch vụ Trợ năng hoạt động.
+4. Bảng **AutoJoy P0.1** sẽ nổi trên màn hình khi dịch vụ Trợ năng hoạt động.
 5. Kéo dòng **✥ AutoJoy P0** để dời bảng sang chỗ trống, tránh che joystick và nút tấn công. Bấm **–** để thu gọn/mở lại bảng.
 
 ## 5. Hiệu chỉnh joystick và nút tấn công
@@ -122,9 +122,9 @@ Kết quả T2–T4 giúp xác định cách điều khiển cho giai đoạn bo
 
 ## Thông tin bản cài
 
-- Tên hiển thị trong điện thoại: **AutoJoy P0**.
+- Tên hiển thị trong điện thoại: **AutoJoy P0.1**.
 - Package: `com.vietha.autojoy`.
 - Phiên bản mới: `0.1.1-P0.1` — bản debug để kiểm tra khả thi.
-- SHA-256 của APK P0 cũ: `ecc3eafd48ab1988cabc78ff74c9cc31a23566720610db733242bb54a11c8915`.
+- SHA-256 của APK P0.1: `37c1e7533d3efb52964486c98fd3154ea6ce7c4a0dd30c107fcecb92348118df`.
 - [Hướng dẫn build dành cho người phát triển](HUONG_DAN.md).
 - Hướng dẫn hệ thống: [Android — Cài đặt bị hạn chế](https://support.google.com/android/answer/12623953?hl=vi), [Samsung — Auto Blocker](https://www.samsung.com/uk/support/mobile-devices/protect-your-galaxy-device-with-the-new-auto-blocker-feature/).
